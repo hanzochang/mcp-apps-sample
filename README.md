@@ -31,7 +31,8 @@ pnpm dev
 {
   "mcpServers": {
     "color-palette": {
-      "url": "http://localhost:3001/mcp"
+      "command": "/opt/homebrew/bin/npx",
+      "args": ["tsx", "/path/to/mcp-apps/main.ts", "--stdio"]
     }
   }
 }
@@ -39,23 +40,13 @@ pnpm dev
 
 設定後、Claude Desktopを再起動してください。
 
-### cloudflaredトンネル経由（localhost接続が動かない場合）
+### HTTP経由で接続する場合
 
 ```bash
-npx cloudflared tunnel --url http://localhost:3001
+pnpm serve
 ```
 
-表示されたURLで設定を置き換えてください。
-
-```json
-{
-  "mcpServers": {
-    "color-palette": {
-      "url": "https://xxxx.trycloudflare.com/mcp"
-    }
-  }
-}
-```
+で起動後、`http://localhost:3001/mcp` に接続します。
 
 ## 動作確認（curl）
 
@@ -75,10 +66,22 @@ curl -X POST http://localhost:3001/mcp \
 
 ## ツール
 
-| ツール名 | 説明 |
-|---|---|
+| ツール名           | 説明                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------- |
 | `generate-palette` | ベースカラーからパレットを生成（complementary, analogous, triadic, monochromatic, split-complementary） |
-| `check-contrast` | 2色間のWCAGコントラスト比を計算 |
+| `check-contrast`   | 2色間のWCAGコントラスト比を計算                                                                         |
+
+## 新しいMCP Appプロジェクトを作る
+
+このプロジェクトの構成をベースに、新しいMCP Appをスキャフォールドするスキルを用意しています。
+
+Claude Code上で以下を実行してください。
+
+```
+/skill dev_init-mcp-app my-new-app
+```
+
+サーバー・クライアント・Viteバンドル・デュアルトランスポート（stdio + HTTP）の雛形が一括生成されます。
 
 ## 技術スタック
 
